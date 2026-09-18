@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#060606"/>
+  <g fill="#f3f2ee" transform="translate(9 12) skewX(-6)">
+    <!-- G: жирный гротеск, открытый счётчик, язычок -->
+    <path d="M12 0 L34 0 L34 9 L11 9 L11 31 L25 31 L25 25 L18 25 L18 17 L34 17 L34 40 L2 40 L2 10 Q2 0 12 0 Z"/>
+    <!-- 2: три полки, диагональ -->
+    <path d="M38 0 L58 0 Q62 0 62 4 L62 20 L47 20 L47 31 L62 31 L62 40 L38 40 L38 13 L53 13 L53 9 L38 9 Z"/>
+  </g>
+</svg>

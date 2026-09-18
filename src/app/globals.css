@@ -1,0 +1,526 @@
+@import "tailwindcss";
+
+@theme {
+  /*
+   * extra small breakpoint: below this the product grid collapses to one column.
+   * 22.5rem = 360px — обычные телефоны (375–430px) получают две колонки,
+   * одна остаётся только для совсем узких экранов.
+   */
+  --breakpoint-xs: 22.5rem;
+
+  --color-void: #060606;
+  --color-carbon: #0a0a0b;
+  --color-graphite: #121214;
+  --color-ash: #1c1c1f;
+  --color-steel: #2a2a2e;
+  --color-smoke: #6d6e72;
+  --color-mist: #9d9ea2;
+  --color-bone: #f3f2ee;
+  --color-paper: #e6e4dd;
+
+  --font-display: var(--font-display-file), "Helvetica Neue", "Arial Narrow",
+    Helvetica, Arial, sans-serif;
+  --font-body: var(--font-body-file), "Helvetica Neue", Inter, Helvetica, Arial,
+    sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
+
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-editorial: cubic-bezier(0.62, 0.05, 0.28, 0.99);
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-void);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Lenis inertial scrolling */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-bone);
+    font-family: var(--font-body);
+    font-feature-settings: "kern" 1, "liga" 1;
+    letter-spacing: -0.005em;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-bone);
+    color: var(--color-void);
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #08080a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #24242a;
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #35353c;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-bone);
+    outline-offset: 3px;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  img {
+    user-select: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * TYPOGRAPHY
+ * ------------------------------------------------------------------ */
+@utility eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.625rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--color-smoke);
+}
+
+/* Заголовки секций как в референсе: «НОВЫЕ ПОСТУПЛЕНИЯ» */
+@utility eyebrow-lg {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.1vw, 1.4rem);
+  line-height: 1;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@utility meta {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-smoke);
+}
+
+@utility type-display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 0.94;
+}
+
+/*
+ * Вордмарк G2: у Oswald нет курсива, поэтому браузер синтезировал
+ * наклон, а поверх него шёл ещё skewX — текст «косил». Оставляем один
+ * управляемый наклон и небольшой отступ, чтобы наклонные глифы не срезались
+ * масками анимации.
+ */
+@utility wordmark {
+  font-family: var(--font-display);
+  text-transform: none;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: -0.02em;
+  transform: skewX(-6deg);
+  transform-origin: left bottom;
+  display: inline-block;
+  padding-inline: 0.04em;
+}
+
+/*
+ * ЛОГОТИП «G2»
+ * Дисплейный гротеск, тяжёлое начертание, плотный трекинг. Двойка чуть
+ * приподнята и сжата по ширине — читается как индекс модели, а не как число.
+ * Лёгкий наклон (−6°) даёт технический, «скоростной» характер.
+ */
+@utility logo-mark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: -0.06em;
+  display: inline-flex;
+  align-items: baseline;
+  transform: skewX(-6deg);
+  transform-origin: left bottom;
+  padding-inline: 0.06em 0.1em;
+  white-space: nowrap;
+  font-feature-settings: "kern" 1, "lnum" 1;
+  color: currentColor;
+}
+
+@layer components {
+  .logo-mark__two {
+    display: inline-block;
+    transform: translateY(-0.04em) scaleX(0.92);
+    transform-origin: left bottom;
+    margin-left: 0.02em;
+  }
+}
+
+@utility link-underline {
+  position: relative;
+  display: inline-block;
+}
+
+@layer components {
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.7s var(--ease-premium);
+  }
+  .link-underline:hover::after,
+  .link-underline[data-active="true"]::after {
+    transform: scaleX(1);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * SURFACES
+ * ------------------------------------------------------------------ */
+@layer components {
+  .hairline {
+    border-color: color-mix(in srgb, var(--color-bone) 12%, transparent);
+  }
+
+  .grain::before {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0.22;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    animation: grain-shift 8s steps(6) infinite;
+  }
+
+  .vignette::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      120% 90% at 50% 40%,
+      transparent 35%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+  }
+
+  .rule-grid {
+    background-image: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-bone) 7%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 25% 100%;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * MOTION  — slow, controlled, expensive
+ * ------------------------------------------------------------------ */
+@layer components {
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 26px), 0);
+    transition:
+      opacity 1.1s var(--ease-premium),
+      transform 1.25s var(--ease-premium);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-reveal-image] {
+    clip-path: inset(14% 0% 14% 0%);
+    transform: scale(1.07);
+    transition:
+      clip-path 1.5s var(--ease-premium),
+      transform 1.7s var(--ease-premium);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  [data-reveal-image].is-visible {
+    clip-path: inset(0% 0% 0% 0%);
+    transform: none;
+  }
+
+  [data-reveal-line] {
+    display: block;
+    overflow: hidden;
+    /* запас под выносные элементы и наклонные глифы */
+    padding: 0.06em 0.08em 0.1em 0.04em;
+    margin: -0.06em -0.08em -0.1em -0.04em;
+  }
+
+  [data-reveal-line] > span {
+    display: block;
+    transform: translate3d(0, 115%, 0);
+    transition: transform 1.3s var(--ease-premium);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  [data-reveal-line].is-visible > span {
+    transform: none;
+  }
+
+  [data-page] {
+    animation: page-enter 1s var(--ease-premium) both;
+  }
+
+  .page-curtain {
+    animation: curtain 0.95s var(--ease-editorial) both;
+  }
+
+  .marquee-track {
+    animation: marquee 42s linear infinite;
+  }
+
+  .scroll-cue span {
+    animation: cue 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes curtain {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, -101%, 0);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+@keyframes grain-shift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2%, 1.5%);
+  }
+  50% {
+    transform: translate(1.5%, -1%);
+  }
+  75% {
+    transform: translate(-1%, -2%);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * CURSOR (fine pointers only)
+ * ------------------------------------------------------------------ */
+@layer components {
+  /* КУРСОР — силуэт БПЛА G2 */
+  .cursor-shell {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 90;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    will-change: transform;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-premium);
+  }
+
+  .cursor-shell[data-visible="true"] {
+    opacity: 1;
+  }
+
+  /* JS задаёт поворот по курсу; здесь только масштаб состояний */
+  .cursor-drone {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-left: -15.5px;
+    margin-top: -22px;
+    display: block;
+    color: #fff;
+    will-change: transform;
+  }
+
+  .cursor-drone svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 50%;
+    transform: scale(0.95);
+    transition:
+      transform 0.6s var(--ease-premium),
+      opacity 0.45s linear;
+  }
+
+  /* точка-хотспот: точное место клика */
+  .cursor-hotspot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 4px;
+    margin: -2px 0 0 -2px;
+    border-radius: 999px;
+    background: #fff;
+    transition:
+      transform 0.45s var(--ease-premium),
+      opacity 0.4s linear;
+  }
+
+  .cursor-shell[data-hover="true"] .cursor-drone svg {
+    transform: scale(1.12);
+  }
+
+  .cursor-shell[data-hover="true"] .cursor-hotspot {
+    transform: scale(0.55);
+    opacity: 0.65;
+  }
+
+  .cursor-shell[data-down="true"] .cursor-drone svg {
+    transform: scale(0.9);
+  }
+
+  .cursor-shell[data-down="true"] .cursor-hotspot {
+    transform: scale(0.75);
+  }
+
+  /* в полях ввода аппарат «уходит в сторону», возвращая системную каретку */
+  .cursor-shell[data-text="true"] .cursor-drone svg {
+    transform: scale(0.45);
+    opacity: 0.22;
+  }
+
+  .cursor-shell[data-text="true"] .cursor-hotspot {
+    opacity: 0;
+  }
+
+  html[data-cursor="custom"],
+  html[data-cursor="custom"] * {
+    cursor: none !important;
+  }
+
+  html[data-cursor="custom"] input,
+  html[data-cursor="custom"] textarea,
+  html[data-cursor="custom"] select {
+    cursor: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * SCROLLBAR-LESS RAILS + REDUCED MOTION
+ * ------------------------------------------------------------------ */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+/* Зерно — слой с blend-mode поверх всей страницы; на телефонах это заметная нагрузка на GPU при нулевой пользе. */
+@media (max-width: 639px) {
+  .grain::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-reveal],
+  [data-reveal-image],
+  [data-reveal-line] > span {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  .marquee-track,
+  .scroll-cue span,
+  .grain::before {
+    animation: none !important;
+  }
+  .page-curtain {
+    display: none;
+  }
+}
